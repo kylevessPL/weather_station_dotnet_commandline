@@ -77,7 +77,11 @@ namespace WeatherService
 
         private static string SerializeJson(List<Measurement> measurementList)
         {
-            return JsonSerializer.Serialize(measurementList);
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true
+            };
+            return JsonSerializer.Serialize(measurementList, options);
         }
     }
 }

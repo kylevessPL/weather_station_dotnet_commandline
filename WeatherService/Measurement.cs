@@ -1,26 +1,25 @@
 ﻿using System;
-using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace WeatherService
 {
-    [DataContract]
     public class Measurement
     {
-        [DataMember] public string SensorName { get; set; }
+        [JsonPropertyName("sensor_name")] public string SensorName { get; init; }
 
-        [DataMember] public int BatteryLevel { get; set; }
+        [JsonPropertyName("battery_level")] public int BatteryLevel { get; init; }
 
-        [DataMember] public DateTime DateTime { get; set; }
+        [JsonPropertyName("datetime")] public DateTime DateTime { get; init; }
 
-        [DataMember] public double Value { get; set; }
+        [JsonPropertyName("value")] public double Value { get; init; }
 
-        public MeasurementType Type { get; set; }
+        [JsonIgnore] public MeasurementType Type { get; init; }
 
-        [DataMember(Name = "Type")]
-        private string MeasurementTypeName
+        [JsonPropertyName("type")]
+        public string MeasurementTypeName
         {
             get => Enum.GetName(typeof(MeasurementType), Type);
-            set => Type = (MeasurementType) Enum.Parse(typeof(MeasurementType), value, true);
+            init => Type = (MeasurementType) Enum.Parse(typeof(MeasurementType), value, true);
         }
     }
 }
