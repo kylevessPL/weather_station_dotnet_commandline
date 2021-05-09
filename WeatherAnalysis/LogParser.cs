@@ -9,7 +9,9 @@ namespace WeatherAnalysis
 {
     public static class LogParser
     {
-        private static readonly string BasePath = AppContext.BaseDirectory;
+        private static readonly string BasePath =
+            Path.GetFullPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                "weatherservice"));
 
         public static List<Measurement> FindMeasurements(Predicate<Measurement> predicate)
         {
@@ -36,7 +38,13 @@ namespace WeatherAnalysis
 
         private static IEnumerable<Measurement> ReadJsonFile(string path)
         {
-            var text = File.ReadAllText(path);
+            string text;
+            using (var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (var textReader = new StreamReader(fileStream))
+            {
+                text = textReader.ReadToEnd();
+            }
+
             try
             {
                 return (List<Measurement>) JsonSerializer.Deserialize(text, typeof(List<Measurement>));
@@ -50,7 +58,7 @@ namespace WeatherAnalysis
 
         private static IEnumerable<string> GetAllJsonFiles()
         {
-            return Directory.GetFiles(BasePath, "*.json");
+            return !Directory.Exists(BasePath) ? Enumerable.Empty<string>() : Directory.GetFiles(BasePath, "*.json");
         }
     }
 }

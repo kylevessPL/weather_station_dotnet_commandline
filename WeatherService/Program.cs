@@ -2,7 +2,7 @@
 
 namespace WeatherService
 {
-    public static class Program
+    public static class PressureProgram
     {
         public static void Main()
         {

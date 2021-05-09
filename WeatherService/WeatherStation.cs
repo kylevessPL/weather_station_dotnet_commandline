@@ -9,7 +9,9 @@ namespace WeatherService
 {
     public class WeatherStation
     {
-        private static readonly string BasePath = AppContext.BaseDirectory;
+        private static readonly string BasePath =
+            Path.GetFullPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                "weatherservice"));
 
         private static int _stationCount = 1;
 
@@ -45,6 +47,7 @@ namespace WeatherService
 
         private void WriteDataToJson(Measurement measurement)
         {
+            Directory.CreateDirectory(BasePath);
             var path = Path.Combine(BasePath, Path.GetFileName(_name) + ".json");
             _lock.EnterWriteLock();
             try

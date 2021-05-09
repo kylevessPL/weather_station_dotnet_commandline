@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using WeatherExtensions;
 using WeatherService;
 
@@ -110,18 +111,22 @@ namespace WeatherAnalysis
 
         private static Predicate<Measurement> BuildFindByDatetimeRangePredicate()
         {
+            string[] formats = {"dd/MM/yyyy HH:mm:ss", "dd/MM/yyyy"};
             DateTime minValue;
             for (;;)
             {
-                Console.WriteLine("Type minimum datetime value: ");
-                if (DateTime.TryParse(Console.ReadLine(), out minValue)) break;
+                Console.WriteLine("Type minimum datetime value (dd/MM/yyyy HH:mm:ss or dd/MM/yyyy format): ");
+                if (DateTime.TryParseExact(Console.ReadLine(),
+                    formats, CultureInfo.CurrentCulture, DateTimeStyles.None,
+                    out minValue))
+                    break;
                 Console.WriteLine("Not a valid datetime");
             }
 
             DateTime maxValue;
             for (;;)
             {
-                Console.WriteLine("Type maximum datetime value: ");
+                Console.WriteLine("Type maximum datetime value (dd/MM/yyyy HH:mm:ss or dd/MM/yyyy format): ");
                 if (DateTime.TryParse(Console.ReadLine(), out maxValue)) break;
                 Console.WriteLine("Not a valid datetime");
             }
@@ -145,9 +150,9 @@ namespace WeatherAnalysis
         private static Predicate<Measurement> BuildFindByCustomCriteriaPredicate()
         {
             Predicate<Measurement> predicate = _ => true;
-            PrintCustomCriteriaCommandList();
             for (;;)
             {
+                PrintCustomCriteriaCommandList();
                 Console.WriteLine("Choose operation: ");
                 var choice = int.TryParse(Console.ReadLine(), out var outValue)
                     ? outValue
