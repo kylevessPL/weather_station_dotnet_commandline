@@ -6,14 +6,21 @@ namespace WeatherService
     [DataContract]
     public class Measurement
     {
-        [DataMember] public string SensorName { get; init; }
+        [DataMember] public string SensorName { get; set; }
 
-        [DataMember] public int BatteryLevel { get; init; }
+        [DataMember] public int BatteryLevel { get; set; }
 
-        [DataMember] public DateTime DateTime { get; init; }
+        [DataMember] public DateTime DateTime { get; set; }
 
-        [DataMember] public double Value { get; init; }
+        [DataMember] public double Value { get; set; }
 
-        [DataMember] public MeasurementType Type { get; init; }
+        public MeasurementType Type { get; set; }
+
+        [DataMember(Name = "Type")]
+        private string MeasurementTypeName
+        {
+            get => Enum.GetName(typeof(MeasurementType), Type);
+            set => Type = (MeasurementType) Enum.Parse(typeof(MeasurementType), value, true);
+        }
     }
 }

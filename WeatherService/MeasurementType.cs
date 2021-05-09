@@ -1,12 +1,9 @@
-﻿using System.Runtime.Serialization;
-
-namespace WeatherService
+﻿namespace WeatherService
 {
-    [DataContract]
     public enum MeasurementType
     {
-        [EnumMember] Temperature,
-        [EnumMember] Humidity,
-        [EnumMember] Pressure
+        Temperature,
+        Humidity,
+        Pressure
     }
 }

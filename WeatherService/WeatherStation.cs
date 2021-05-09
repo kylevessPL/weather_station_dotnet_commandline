@@ -45,13 +45,13 @@ namespace WeatherService
 
         private void WriteDataToJson(Measurement measurement)
         {
-            var path = Path.Combine(BasePath, Path.GetFileName(measurement.SensorName) + ".json");
-            var measurementList = ReadJsonFile(path).ToList();
-            measurementList.Add(measurement);
-            var jsonData = SerializeJson(measurementList);
+            var path = Path.Combine(BasePath, Path.GetFileName(_name) + ".json");
             _lock.EnterWriteLock();
             try
             {
+                var measurementList = ReadJsonFile(path).ToList();
+                measurementList.Add(measurement);
+                var jsonData = SerializeJson(measurementList);
                 File.WriteAllText(path, jsonData);
             }
             finally
