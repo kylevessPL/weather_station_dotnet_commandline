@@ -4,7 +4,7 @@ namespace WeatherExtensions
 {
     public static class PredicateExtensions
     {
-        public static Predicate<T> And<T>(this Predicate<T> p1, Predicate<T> p2)
+        public static Func<T, bool> And<T>(this Func<T, bool> p1, Func<T, bool> p2)
         {
             return x => p1(x) && p2(x);
         }

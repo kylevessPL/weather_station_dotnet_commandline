@@ -13,9 +13,9 @@ namespace WeatherAnalysis
             Path.GetFullPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
                 "weatherservice"));
 
-        public static List<Measurement> FindMeasurements(Predicate<Measurement> predicate)
+        public static List<Measurement> FindMeasurements(Func<Measurement, bool> predicate)
         {
-            return GetAllMeasurements().ToList().FindAll(predicate);
+            return GetAllMeasurements().Where(predicate).ToList();
         }
 
         public static List<Measurement> SortMeasurements<TKey>(

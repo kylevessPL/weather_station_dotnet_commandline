@@ -17,7 +17,7 @@ namespace WeatherAnalysis
                 var operationChoice = int.TryParse(Console.ReadLine(), out var outValue)
                     ? outValue
                     : default(int?);
-                Predicate<Measurement> predicate;
+                Func<Measurement, bool> predicate;
                 switch (operationChoice)
                 {
                     case 1:
@@ -53,7 +53,7 @@ namespace WeatherAnalysis
 
                 if (sortChoice.Equals("y"))
                 {
-                    var func = BuildSortFunc();
+                    var func = BuildSortPredicate();
                     var sortDirection = GetSortDirection();
                     measurements = LogParser.SortMeasurements(measurements, func, sortDirection);
                 }
@@ -62,7 +62,7 @@ namespace WeatherAnalysis
             }
         }
 
-        private static Predicate<Measurement> BuildFindBySensorNamePredicate()
+        private static Func<Measurement, bool> BuildFindBySensorNamePredicate()
         {
             for (;;)
             {
@@ -73,7 +73,7 @@ namespace WeatherAnalysis
             }
         }
 
-        private static Predicate<Measurement> BuildFindByTypeAndValueRangePredicate()
+        private static Func<Measurement, bool> BuildFindByTypeAndValueRangePredicate()
         {
             PrintMeasurementTypeList();
             int choice;
@@ -109,7 +109,7 @@ namespace WeatherAnalysis
                 measurement.Value.InRange(minValue, maxValue);
         }
 
-        private static Predicate<Measurement> BuildFindByDatetimeRangePredicate()
+        private static Func<Measurement, bool> BuildFindByDatetimeRangePredicate()
         {
             string[] formats = {"dd/MM/yyyy HH:mm:ss", "dd/MM/yyyy"};
             DateTime minValue;
@@ -134,7 +134,7 @@ namespace WeatherAnalysis
             return measurement => measurement.DateTime.InRange(minValue, maxValue);
         }
 
-        private static Predicate<Measurement> BuildFindByBatteryLevelMaxPredicate()
+        private static Func<Measurement, bool> BuildFindByBatteryLevelMaxPredicate()
         {
             int value;
             for (;;)
@@ -147,9 +147,9 @@ namespace WeatherAnalysis
             return measurement => measurement.BatteryLevel <= value;
         }
 
-        private static Predicate<Measurement> BuildFindByCustomCriteriaPredicate()
+        private static Func<Measurement, bool> BuildFindByCustomCriteriaPredicate()
         {
-            Predicate<Measurement> predicate = _ => true;
+            Func<Measurement, bool> predicate = _ => true;
             for (;;)
             {
                 PrintCustomCriteriaCommandList();
@@ -157,7 +157,7 @@ namespace WeatherAnalysis
                 var choice = int.TryParse(Console.ReadLine(), out var outValue)
                     ? outValue
                     : default(int?);
-                Predicate<Measurement> value;
+                Func<Measurement, bool> value;
                 switch (choice)
                 {
                     case 1:
@@ -183,7 +183,7 @@ namespace WeatherAnalysis
             }
         }
 
-        private static Func<Measurement, object> BuildSortFunc()
+        private static Func<Measurement, object> BuildSortPredicate()
         {
             PrintMeasurementPropertyList();
             for (;;)
